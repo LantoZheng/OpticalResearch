@@ -1,0 +1,68 @@
+# 清除之前的所有对象
+#deleteall;
+
+# --- 定义模拟参数 ---
+lambda0 = 1e-6;        # 入射光波长 (m)
+f = c/lambda0;       # 光频 (Hz)
+k0 = 2*pi/lambda0;     # 波矢大小
+thickness = 1e-6;   #散射介质厚度
+edge = 2e-6; #散射介质尺寸
+# --- 定义角谱参数 ---
+# 这里假设你的角谱是离散的，由一系列不同方向的平面波组成
+# 你需要根据你的实际角谱数据来定义以下参数
+
+# 角度范围和分辨率 (示例)
+theta_min = 0;         # 最小俯仰角 (度)
+theta_max = 20;        # 最大俯仰角 (度)
+num_theta = 10;        # 俯仰角采样点数
+
+phi_min = 0;           # 最小方位角 (度)
+phi_max = 360;         # 最大方位角 (度)
+num_phi = 20;          # 方位角采样点数
+
+# 创建角度数组
+theta_array = linspace(theta_min, theta_max, num_theta);
+phi_array = linspace(phi_min, phi_max, num_phi);
+
+# 初始化源计数器
+source_count = 0;
+#创建角谱波组
+addgroup;
+set("name", "AngularSpectrumSources");
+# --- 循环创建平面波源 ---
+for (i = 1:length(theta_array)) {
+    theta = theta_array(i) * pi/180;  # 转换为弧度
+    for (j = 1:length(phi_array)) {
+        phi = phi_array(j) * pi/180;    # 转换为弧度
+
+        # --- 添加平面波源 ---
+        addplane;
+        set("name","source_" + num2str(theta,"%.2f")+","+num2str(phi,"%.2f"));
+        set("injection axis", "z"); # 假设光沿 z 轴传播   
+        set("angle theta",theta);
+        set("angle phi",phi);
+        set("center wavelength",4.42e-7);
+        set("wavelength span",5e-9);
+        # --- 设置振幅和相位 ---
+        # !!! 重要 !!!
+        # 你需要根据你的目标角谱来设置每个平面波的振幅和相位
+        # 这里只是一个示例，假设所有平面波振幅相同，相位为 0
+        amplitude = 1;
+        phase = 0;
+        set("amplitude", amplitude);
+        set("phase", phase);
+
+        # --- 设置源的位置和尺寸 ---
+        # 你需要根据你的模拟区域来调整源的位置和尺寸
+        # 这里假设源放置在 z=0 平面上
+        set("direction","forward"); 
+        set("x",0);
+        set("x span",edge);
+        set("y",0);
+        set("y span",edge); 
+        set("z",(-thickness/2)*1.05);
+        addtogroup("AngularSpectrumSources");
+        source_count = source_count + 1;
+    }
+}
+

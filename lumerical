@@ -1,0 +1,71 @@
+# 清除之前的所有对象
+deleteall;
+
+# --- 参数设置 ---
+num = 10000;
+edge = 2e-6; # 散射介质尺寸
+thickness = 1e-6;     # 分布的 Z 轴范围
+max_r = 1e-7;    # 最大半径
+material_name = "SiO2 (Glass) - Palik"; # 材料名称
+max_attempts = 100; # 每个微珠最大尝试次数
+
+
+addgroup;
+set("name", "ScatterMeterial");
+
+# --- 函数：检查是否重叠 ---
+function is_overlapping(x_new, y_new, z_new, r_new, bead_positions) {
+    for (j = 1:length(bead_positions)) {
+        x_old = bead_positions(j, 1);
+        y_old = bead_positions(j, 2);
+        z_old = bead_positions(j, 3);
+        r_old = bead_positions(j, 4);
+        dist = sqrt((x_new - x_old)^2 + (y_new - y_old)^2 + (z_new - z_old)^2);
+        if (dist < r_new + r_old) {
+            return 1; # 重叠
+        }
+    }
+    return 0; # 不重叠
+}
+
+# --- 循环生成微珠 ---
+for (i = 1:num) {
+    attempts = 0;
+    valid_position = 0;
+    
+    while (attempts < max_attempts && valid_position == 0) {
+        # --- 生成随机尺寸 ---
+        scatter_r = (0.9 * rand() + 0.1) * max_r; # 随机半径
+        
+        # --- 生成随机中心位置 ---
+        z_center = (rand() - 0.5) * thickness;
+        x_center = (rand() - 0.5) * edge;
+        y_center = (rand() - 0.5) * edge;
+
+        # --- 检查是否重叠 ---
+        if (!is_overlapping(x_center, y_center, z_center, scatter_r, bead_positions)) {
+            valid_position = 1; # 找到有效位置
+            # 保存新位置
+            bead_positions = matrixinsert(bead_positions, [x_center, y_center, z_center, scatter_r], length(bead_positions) + 1, 1);
+            
+            # 添加微珠
+            addsphere;
+            set("name", "ball_" + num2str(i));
+            set("material", material_name);
+            set("radius", scatter_r);
+            set("z", z_center);
+            set("x", x_center);
+            set("y", y_center);
+            addtogroup("ScatterMeterial");
+        }
+
+        attempts = attempts + 1;
+    }
+    
+    if (attempts == max_attempts) {
+        ?("无法放置更多微珠，已放置 " + num2str(i - 1) + " 个微珠。");
+        break;
+    }
+    
+    ?i;
+}

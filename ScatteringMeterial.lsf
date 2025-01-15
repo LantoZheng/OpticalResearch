@@ -1,0 +1,12 @@
+# 获取group名称
+group_name = "ScatterMeterial";  # 替换为你创建的group的名称
+
+# 获取group中所有子结构的名称
+structures_var = getnamedstructures(group_name);
+
+# 遍历所有子结构
+for (i = 1:length(structures_var)) {
+    structure_name = structures_var(i);
+    # 修改子结构的材料属性
+    set(structure_name, "material", "ZnO@442");  # 替换为所需材料
+}

@@ -1,0 +1,14 @@
+Ansys Lumerical 2020 R2 FDTD Solver Version 8.24.2387 (Windows 64bit)
+ expires (month/day/year): 12/31/2035
+using config file: Ansys Licensing set with ANSYSLMD_LICENSE_FILE
+license host: 
+current time: Wed Jan 15 11:57:43 2025
+Running on host: DESKTOP-O827CTM
+host available memory (GB): 57.092112
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: C:\Program Files\Lumerical\v202\bin\fdtd-engine-msmpi.exe -t 1 -remote C:/Users/BSD/Code/OpticalResearch/ScatteringMeterial.fsp
+number of processors is 32
+processors are distributed as: 4x4x2
+Running 3D Simulation
+Starting meshing
+Simulation size in gridpoints: 542 x 543 x 203
