@@ -133,12 +133,12 @@ if __name__ == "__main__":
 
     plt.subplot(1, 2, 1)
     plt.imshow(estimated_input_phase, cmap='hsv')
-    plt.title('估计的输入平面相位')
+    plt.title('Estimated Real Space Phase')
     plt.colorbar()
 
     plt.subplot(1, 2, 2)
     plt.imshow(estimated_output_phase, cmap='hsv')
-    plt.title('估计的输出平面相位')
+    plt.title('Estimated Fourier Space Phase')
     plt.colorbar()
 
     plt.tight_layout()
