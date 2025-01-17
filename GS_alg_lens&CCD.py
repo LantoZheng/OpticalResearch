@@ -65,6 +65,7 @@ def gerchberg_saxton_lens(input_amplitude, output_amplitude, wavelength, f, inpu
         input_field = input_amplitude * np.exp(1j * input_phase)
 
     return input_phase, output_phase
+
 def load_image_as_matrix(file_path):
     """加载 bmp 图像并转换为矩阵"""
     image = Image.open(file_path)
@@ -80,17 +81,7 @@ def normalization(image_matrix):
     normalized_matrix = image_matrix / total_energy
     return normalized_matrix
 
-# 示例代码
-input_image_path = 'R_flatfield.bmp'
-output_image_path = 'K_flatfield.bmp'
 
-# 加载输入和输出图像, 并将其归一化
-input_intensity = normalization(load_image_as_matrix(input_image_path))
-output_intensity = normalization(load_image_as_matrix(output_image_path))
-
-# 计算幅度
-input_amplitude = calculate_magnitudes(input_intensity)
-output_amplitude = calculate_magnitudes(output_intensity)
 
 # 示例参数
 if __name__ == "__main__":
@@ -112,17 +103,17 @@ if __name__ == "__main__":
     focal_length = 50  # mm
     wavelength = 0.000442  # mm (例如，He-Ne 激光)
 
-    # 创建示例幅度 (可以替换为实际测量数据)
-    input_intensity = np.ones((m, n))
-    input_amplitude = calculate_magnitudes(input_intensity)
-    output_intensity = np.zeros((m_prime, n_prime))
-    center_x, center_y = m_prime // 2, n_prime // 2
-    radius = 50
-    y_grid, x_grid = np.ogrid[:m_prime, :n_prime]
-    mask = (x_grid - center_x)**2 + (y_grid - center_y)**2 <= radius**2
-    output_intensity[mask] = 1
-    output_amplitude = calculate_magnitudes(output_intensity)
+    #导入数据
+    input_image_path = 'R_flatfield.bmp'
+    output_image_path = 'K_flatfield.bmp'
 
+    # 加载输入和输出图像, 并将其归一化
+    input_intensity = normalization(load_image_as_matrix(input_image_path))
+    output_intensity = normalization(load_image_as_matrix(output_image_path))
+
+    # 计算幅度
+    input_amplitude = calculate_magnitudes(input_intensity) 
+    output_amplitude = calculate_magnitudes(output_intensity)
     # 运行 GS 算法
     estimated_input_phase, estimated_output_phase = gerchberg_saxton_lens(
         input_amplitude, output_amplitude, wavelength, focal_length, input_pixel_size, output_pixel_size, iterations=100
