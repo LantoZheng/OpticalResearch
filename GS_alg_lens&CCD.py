@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 
 def calculate_magnitudes(intensity):
@@ -64,6 +65,22 @@ def gerchberg_saxton_lens(input_amplitude, output_amplitude, wavelength, f, inpu
         input_field = input_amplitude * np.exp(1j * input_phase)
 
     return input_phase, output_phase
+def load_image_as_matrix(file_path):
+    """加载 bmp 图像并转换为矩阵"""
+    image = Image.open(file_path)
+    image = image.convert('L')  # 转换为灰度图像
+    image_matrix = np.array(image)
+    return image_matrix
+
+# 示例代码
+input_image_path = '/path/to/input_image.bmp'
+output_image_path = '/path/to/output_image.bmp'
+
+input_intensity = load_image_as_matrix(input_image_path)
+output_intensity = load_image_as_matrix(output_image_path)
+
+input_amplitude = calculate_magnitudes(input_intensity)
+output_amplitude = calculate_magnitudes(output_intensity)
 
 # 示例参数
 if __name__ == "__main__":
