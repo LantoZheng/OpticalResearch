@@ -72,35 +72,45 @@ def load_image_as_matrix(file_path):
     image_matrix = np.array(image)
     return image_matrix
 
+def normalization(image_matrix):
+    """将图像矩阵中的总能量归一化"""
+    total_energy = np.sum(image_matrix)
+    if total_energy == 0:
+        return image_matrix
+    normalized_matrix = image_matrix / total_energy
+    return normalized_matrix
+
 # 示例代码
 input_image_path = '/path/to/input_image.bmp'
 output_image_path = '/path/to/output_image.bmp'
 
-input_intensity = load_image_as_matrix(input_image_path)
-output_intensity = load_image_as_matrix(output_image_path)
+# 加载输入和输出图像, 并将其归一化
+input_intensity = normalization(load_image_as_matrix(input_image_path))
+output_intensity = normalization(load_image_as_matrix(output_image_path))
 
+# 计算幅度
 input_amplitude = calculate_magnitudes(input_intensity)
 output_amplitude = calculate_magnitudes(output_intensity)
 
 # 示例参数
 if __name__ == "__main__":
     # 输入平面参数
-    a = 10  # mm
-    b = 10  # mm
-    m = 128
-    n = 128
+    a = 8.446  # mm
+    b = 7.066  # mm
+    m = 2448
+    n = 2048
     input_pixel_size = (a / m, b / n)
 
     # 输出平面参数
-    a_prime = 20  # mm
-    b_prime = 20  # mm
-    m_prime = 256
-    n_prime = 256
+    a_prime = 8.446  # mm
+    b_prime = 7.066  # mm
+    m_prime = 2448
+    n_prime = 2048
     output_pixel_size = (a_prime / m_prime, b_prime / n_prime)
 
     # 透镜参数
-    focal_length = 100  # mm
-    wavelength = 0.0006328  # mm (例如，He-Ne 激光)
+    focal_length = 50  # mm
+    wavelength = 0.000442  # mm (例如，He-Ne 激光)
 
     # 创建示例幅度 (可以替换为实际测量数据)
     input_intensity = np.ones((m, n))
