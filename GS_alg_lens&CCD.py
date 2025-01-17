@@ -81,8 +81,8 @@ def normalization(image_matrix):
     return normalized_matrix
 
 # 示例代码
-input_image_path = '/path/to/input_image.bmp'
-output_image_path = '/path/to/output_image.bmp'
+input_image_path = 'R_flatfield.bmp'
+output_image_path = 'K_flatfield.bmp'
 
 # 加载输入和输出图像, 并将其归一化
 input_intensity = normalization(load_image_as_matrix(input_image_path))
