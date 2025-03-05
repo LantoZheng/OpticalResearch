@@ -24,7 +24,7 @@ def propagate_from_far_field(output_field_fft, wavelength, f, output_pixel_size)
     ifft_result = np.fft.ifft2(ifft_shifted)
     return ifft_result
 
-def gerchberg_saxton_lens(input_amplitude, output_amplitude, wavelength, f, input_pixel_size, output_pixel_size, iterations=100):
+def gerchberg_saxton_lens(input_amplitude, output_amplitude, wavelength, f, input_pixel_size, output_pixel_size, iterations=1000):
     """使用 GS 算法求解透镜成像场景中的相位"""
     ny_in, nx_in = input_amplitude.shape
     ny_out, nx_out = output_amplitude.shape
@@ -32,6 +32,7 @@ def gerchberg_saxton_lens(input_amplitude, output_amplitude, wavelength, f, inpu
     # 初始化输入平面相位
     input_phase = np.random.rand(ny_in, nx_in) * 2 * np.pi - np.pi
     input_field = input_amplitude * np.exp(1j * input_phase)
+    output_phase = np.zeros_like(output_amplitude)
 
     for i in range(iterations):
         # 前向传播到远场
@@ -101,7 +102,7 @@ if __name__ == "__main__":
 
     # 透镜参数
     focal_length = 50  # mm
-    wavelength = 0.000442  # mm (例如，He-Ne 激光)
+    wavelength = 0.000442  # mm 
 
     #导入数据
     input_image_path = 'R_flatfield.bmp'
